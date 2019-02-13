@@ -27,3 +27,6 @@ lint: prometheus_alerts.yaml prometheus_rules.yaml
 
 clean:
 	rm -rf dashboards_out prometheus_alerts.yaml prometheus_rules.yaml
+
+runbook.md: runbook.tmpl
+	mixtool runbook --template-file runbook.tmpl mixin.libsonnet > runbook.md

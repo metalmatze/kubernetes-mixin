@@ -145,6 +145,9 @@
             annotations: {
               message: 'CronJob {{ $labels.namespaces }}/{{ $labels.cronjob }} is taking more than 1h to complete.',
             },
+            runbook: |||
+              Check the cronjob using kubectl decribe cronjob <cronjob> and look at the pod logs using kubectl logs <pod> for further information.
+            ||| % $._config,
           },
           {
             alert: 'KubeJobCompletion',
@@ -158,6 +161,9 @@
             annotations: {
               message: 'Job {{ $labels.namespaces }}/{{ $labels.job }} is taking more than 1h to complete.',
             },
+            runbook: |||
+              Check the job using kubectl decribe job <job> and look at the pod logs using kubectl logs <pod> for further information.
+            ||| % $._config,
           },
           {
             alert: 'KubeJobFailed',
@@ -171,6 +177,9 @@
             annotations: {
               message: 'Job {{ $labels.namespaces }}/{{ $labels.job }} failed to complete.',
             },
+            runbook: |||
+              Check the job using kubectl decribe job <job> and look at the pod logs using kubectl logs <pod> for further information.
+            ||| % $._config,
           },
         ],
       },

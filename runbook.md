@@ -9,123 +9,224 @@ Matthew Skelton & Rob Thatcher have an excellent [run book template](https://git
 
 This page collects this repositories alerts and begins the process of describing what they mean and how it might be addressed. Links from alerts to this page are added [automatically](https://github.com/kubernetes-monitoring/kubernetes-mixin/blob/master/alerts/add-runbook-links.libsonnet).
 
-### Group Name: "kubernetes-absent"
-##### Alert Name: "KubeAPIDown"
+
+### kubernetes-absent
+
+##### KubeAPIDown
++ *Severity*: critical
 + *Message*: `KubeAPI has disappeared from Prometheus target discovery.`
+
+
+
+##### KubeControllerManagerDown
 + *Severity*: critical
-##### Alert Name: "KubeControllerManagerDown"
 + *Message*: `KubeControllerManager has disappeared from Prometheus target discovery.`
+
+
+
+##### KubeSchedulerDown
 + *Severity*: critical
-+ *Runbook*: [Link](https://coreos.com/tectonic/docs/latest/troubleshooting/controller-recovery.html#recovering-a-controller-manager)
-##### Alert Name: KubeSchedulerDown
-+ *Message*: `KubeScheduler has disappeared from Prometheus target discovery`
++ *Message*: `KubeScheduler has disappeared from Prometheus target discovery.`
+
+
+
+##### KubeletDown
 + *Severity*: critical
-+ *Runbook*: [Link](https://coreos.com/tectonic/docs/latest/troubleshooting/controller-recovery.html#recovering-a-scheduler)
-##### Alert Name: KubeletDown
 + *Message*: `Kubelet has disappeared from Prometheus target discovery.`
+
+
+
+### kubernetes-apps
+
+##### KubePodCrashLooping
 + *Severity*: critical
-### Group Name: kubernetes-apps
-##### Alert Name: KubePodCrashLooping
-+ *Message*: `{{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is restarting {{ printf \"%.2f\" $value }} / second`
++ *Message*: `{{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is restarting {{ printf "%.2f" $value }} / second`
+
+
+
+##### KubePodNotReady
 + *Severity*: critical
-##### Alert Name: "KubePodNotReady"
 + *Message*: `{{ $labels.namespace }}/{{ $labels.pod }} is not ready.`
+
+
+
+##### KubeDeploymentGenerationMismatch
 + *Severity*: critical
-##### Alert Name: "KubeDeploymentGenerationMismatch"
 + *Message*: `Deployment {{ $labels.namespace }}/{{ $labels.deployment }} generation mismatch`
+
+
+
+##### KubeDeploymentReplicasMismatch
 + *Severity*: critical
-##### Alert Name: "KubeDeploymentReplicasMismatch"
 + *Message*: `Deployment {{ $labels.namespace }}/{{ $labels.deployment }} replica mismatch`
+
+
+
+##### KubeStatefulSetReplicasMismatch
 + *Severity*: critical
-##### Alert Name: "KubeStatefulSetReplicasMismatch"
 + *Message*: `StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} replica mismatch`
+
+
+
+##### KubeStatefulSetGenerationMismatch
 + *Severity*: critical
-##### Alert Name: "KubeStatefulSetGenerationMismatch"
-+ *Message*: `StatefulSet {{ $labels.namespace }}/{{ labels.statefulset }} generation mismatch`
++ *Message*: `StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} generation mismatch`
+
+
+
+##### KubeDaemonSetRolloutStuck
 + *Severity*: critical
-##### Alert Name: "KubeDaemonSetRolloutStuck"
 + *Message*: `Only {{$value}}% of desired pods scheduled and ready for daemon set {{$labels.namespace}}/{{$labels.daemonset}}`
-+ *Severity*: critical
-##### Alert Name: "KubeDaemonSetNotScheduled"
+
+
+
+##### KubeDaemonSetNotScheduled
++ *Severity*: warning
 + *Message*: `A number of pods of daemonset {{$labels.namespace}}/{{$labels.daemonset}} are not scheduled.`
-+ *Severity*: warning
 
-##### Alert Name: "KubeDaemonSetMisScheduled"
+
+
+##### KubeDaemonSetMisScheduled
++ *Severity*: warning
 + *Message*: `A number of pods of daemonset {{$labels.namespace}}/{{$labels.daemonset}} are running where they are not supposed to run.`
-+ *Severity*: warning
 
-##### Alert Name: "KubeCronJobRunning"
+
+
+##### KubeCronJobRunning
++ *Severity*: warning
 + *Message*: `CronJob {{ $labels.namespaces }}/{{ $labels.cronjob }} is taking more than 1h to complete.`
-+ *Severity*: warning
-+ *Action*: Check the cronjob using `kubectl decribe cronjob <cronjob>` and look at the pod logs using `kubectl logs <pod>` for further information.
 
-##### Alert Name: "KubeJobCompletion"
+Check the cronjob using kubectl decribe cronjob <cronjob> and look at the pod logs using kubectl logs <pod> for further information.
+
+
+##### KubeJobCompletion
++ *Severity*: warning
 + *Message*: `Job {{ $labels.namespaces }}/{{ $labels.job }} is taking more than 1h to complete.`
-+ *Severity*: warning
-+ *Action*: Check the job using `kubectl decribe job <job>` and look at the pod logs using `kubectl logs <pod>` for further information.
 
-##### Alert Name: "KubeJobFailed"
+Check the job using kubectl decribe job <job> and look at the pod logs using kubectl logs <pod> for further information.
+
+
+##### KubeJobFailed
++ *Severity*: warning
 + *Message*: `Job {{ $labels.namespaces }}/{{ $labels.job }} failed to complete.`
-+ *Severity*: warning
-+ *Action*: Check the job using `kubectl decribe job <job>` and look at the pod logs using `kubectl logs <pod>` for further information.
 
-### Group Name: "kubernetes-resources"
-##### Alert Name: "KubeCPUOvercommit"
+Check the job using kubectl decribe job <job> and look at the pod logs using kubectl logs <pod> for further information.
+
+
+### kubernetes-resources
+
+##### KubeCPUOvercommit
++ *Severity*: warning
 + *Message*: `Overcommited CPU resource requests on Pods, cannot tolerate node failure.`
+
+
+
+##### KubeMemOvercommit
 + *Severity*: warning
-##### Alert Name: "KubeMemOvercommit"
 + *Message*: `Overcommited Memory resource requests on Pods, cannot tolerate node failure.`
+
+
+
+##### KubeCPUOvercommit
 + *Severity*: warning
-##### Alert Name: "KubeCPUOvercommit"
 + *Message*: `Overcommited CPU resource request quota on Namespaces.`
+
+
+
+##### KubeMemOvercommit
 + *Severity*: warning
-##### Alert Name: "KubeMemOvercommit"
 + *Message*: `Overcommited Memory resource request quota on Namespaces.`
+
+
+
+##### KubeQuotaExceeded
 + *Severity*: warning
-##### Alert Name: "KubeQuotaExceeded"
-+ *Message*: `{{ printf \"%0.0f\" $value }}% usage of {{ $labels.resource }} in namespace {{ $labels.namespace }}.`
-+ *Severity*: warning
-### Group Name: "kubernetes-storage"
-##### Alert Name: "KubePersistentVolumeUsageCritical"
-+ *Message*: `The persistent volume claimed by {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} has {{ printf \"%0.0f\" $value }}% free.`
++ *Message*: `{{ printf "%0.0f" $value }}% usage of {{ $labels.resource }} in namespace {{ $labels.namespace }}.`
+
+
+
+### kubernetes-storage
+
+##### KubePersistentVolumeUsageCritical
 + *Severity*: critical
-##### Alert Name: "KubePersistentVolumeFullInFourDays"
-+ *Message*: `Based on recent sampling, the persistent volume claimed by {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} is expected to fill up within four days.`
++ *Message*: `The persistent volume claimed by {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} has {{ printf "%0.0f" $value }}% free.`
+
+
+
+##### KubePersistentVolumeFullInFourDays
 + *Severity*: critical
-### Group Name: "kubernetes-system"
-##### Alert Name: "KubeNodeNotReady"
-+ *Message*: `{{ $labels.node }} has been unready for more than an hour"`
++ *Message*: `Based on recent sampling, the persistent volume claimed by {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value }} bytes are available.`
+
+
+
+### kubernetes-system
+
+##### KubeNodeNotReady
 + *Severity*: warning
-##### Alert Name: "KubeVersionMismatch"
++ *Message*: `{{ $labels.node }} has been unready for more than an hour`
+
+
+
+##### KubeVersionMismatch
++ *Severity*: warning
 + *Message*: `There are {{ $value }} different versions of Kubernetes components running.`
+
+
+
+##### KubeClientErrors
 + *Severity*: warning
-##### Alert Name: "KubeClientErrors"
-+ *Message*: `Kubernetes API server client '{{ $labels.job }}/{{ $labels.instance }}' is experiencing {{ printf \"%0.0f\" $value }}% errors.'`
++ *Message*: `Kubernetes API server client '{{ $labels.job }}/{{ $labels.instance }}' is experiencing {{ printf "%0.0f" $value }}% errors.'`
+
+
+
+##### KubeClientErrors
 + *Severity*: warning
-##### Alert Name: "KubeClientErrors"
-+ *Message*: `Kubernetes API server client '{{ $labels.job }}/{{ $labels.instance }}' is experiencing {{ printf \"%0.0f\" $value }} errors / sec.'`
++ *Message*: `Kubernetes API server client '{{ $labels.job }}/{{ $labels.instance }}' is experiencing {{ printf "%0.0f" $value }} errors / sec.'`
+
+
+
+##### KubeletTooManyPods
 + *Severity*: warning
-##### Alert Name: "KubeletTooManyPods"
 + *Message*: `Kubelet {{$labels.instance}} is running {{$value}} pods, close to the limit of 110.`
+
+
+
+##### KubeAPILatencyHigh
 + *Severity*: warning
-##### Alert Name: "KubeAPILatencyHigh"
 + *Message*: `The API server has a 99th percentile latency of {{ $value }} seconds for {{$labels.verb}} {{$labels.resource}}.`
-+ *Severity*: warning
-##### Alert Name: "KubeAPILatencyHigh"
+
+
+
+##### KubeAPILatencyHigh
++ *Severity*: critical
 + *Message*: `The API server has a 99th percentile latency of {{ $value }} seconds for {{$labels.verb}} {{$labels.resource}}.`
+
+
+
+##### KubeAPIErrorsHigh
 + *Severity*: critical
-##### Alert Name: "KubeAPIErrorsHigh"
 + *Message*: `API server is erroring for {{ $value }}% of requests.`
-+ *Severity*: critical
-##### Alert Name: "KubeAPIErrorsHigh"
-+ *Message*: `API server is erroring for {{ $value }}% of requests.`
+
+
+
+##### KubeAPIErrorsHigh
 + *Severity*: warning
-##### Alert Name: "KubeClientCertificateExpiration"
++ *Message*: `API server is erroring for {{ $value }}% of requests.`
+
+
+
+##### KubeClientCertificateExpiration
++ *Severity*: warning
 + *Message*: `Kubernetes API certificate is expiring in less than 7 days.`
-+ *Severity*: warning
-##### Alert Name: "KubeClientCertificateExpiration"
-+ *Message*: `Kubernetes API certificate is expiring in less than 1 day.`
+
+
+
+##### KubeClientCertificateExpiration
 + *Severity*: critical
++ *Message*: `Kubernetes API certificate is expiring in less than 1 day.`
+
+
+
 
 ## Other Kubernetes Runbooks and troubleshooting
 + [Troubleshoot Clusters ](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/)
