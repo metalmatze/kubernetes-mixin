@@ -1,3 +1,5 @@
+local slo = import 'slo-libsonnet/slo.libsonnet';
+
 {
   _config+:: {
     // Selectors are inserted between {} in Prometheus queries.
@@ -23,6 +25,18 @@
       KubeScheduler: $._config.kubeSchedulerSelector,
       KubeControllerManager: $._config.kubeControllerManagerSelector,
       KubeAPI: $._config.kubeApiserverSelector,
+    },
+
+    SLOs: {
+      apiserver: {
+        latency: slo.latency({
+          metric: 'apiserver_request_duration_seconds',
+          selectors: '%s,subresource!="log",verb!~"^(?:LIST|WATCH|WATCHLIST|PROXY|CONNECT)$"' % $._config.kubeApiserverSelector,
+          quantile: 0.99,
+          warning: 1,
+          critical: 4,
+        }),
+      },
     },
 
     // Grafana dashboard IDs are necessary for stable links for dashboards

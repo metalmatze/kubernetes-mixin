@@ -77,28 +77,16 @@ local utils = import 'utils.libsonnet';
               message: 'Kubelet {{ $labels.instance }} is running {{ $value }} Pods, close to the limit of %d.' % $._config.kubeletPodLimit,
             },
           },
-          {
+          $._config.SLOs.apiserver.latency.alertWarning {
             alert: 'KubeAPILatencyHigh',
-            expr: |||
-              cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{%(kubeApiserverSelector)s,quantile="0.99",subresource!="log",verb!~"^(?:LIST|WATCH|WATCHLIST|PROXY|CONNECT)$"} > %(kubeAPILatencyWarningSeconds)s
-            ||| % $._config,
             'for': '10m',
-            labels: {
-              severity: 'warning',
-            },
             annotations: {
               message: 'The API server has a 99th percentile latency of {{ $value }} seconds for {{ $labels.verb }} {{ $labels.resource }}.',
             },
           },
-          {
+          $._config.SLOs.apiserver.latency.alertCritical {
             alert: 'KubeAPILatencyHigh',
-            expr: |||
-              cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{%(kubeApiserverSelector)s,quantile="0.99",subresource!="log",verb!~"^(?:LIST|WATCH|WATCHLIST|PROXY|CONNECT)$"} > %(kubeAPILatencyCriticalSeconds)s
-            ||| % $._config,
             'for': '10m',
-            labels: {
-              severity: 'critical',
-            },
             annotations: {
               message: 'The API server has a 99th percentile latency of {{ $value }} seconds for {{ $labels.verb }} {{ $labels.resource }}.',
             },
